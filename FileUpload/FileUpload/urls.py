@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from ImageUpload.views import ImageUploadView
+from ImageUpload.views import ImageUploadView, GetImageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('upload-image/', ImageUploadView.as_view())
+    path('upload-image/', ImageUploadView.as_view()),
+    path('<int:pk>/image/', GetImageView.as_view()),
 ]

@@ -10,17 +10,9 @@ from ImageUpload.models import ImageRepo
 from django.http import FileResponse
 
 
-class ImageUploadView(generics.ListCreateAPIView):
+class ImageUploadView(generics.CreateAPIView):
     parser_class = (FileUploadParser,)
     serializer_class = ImageSerializer()
-
-    def get(self, request, *args, **kwargs):
-      param = request.data
-      image_id = param.get('pk')
-      image_file = ImageRepo.objects.get(pk=image_id)
-      img_path =  image_file.processed_file
-      response = FileResponse(open(img_path.path, 'rb'), content_type="image/png")
-      return response
 
     def post(self, request, *args, **kwargs):
       file_serializer = ImageSerializer(data=request.data)
@@ -37,3 +29,14 @@ class ImageUploadView(generics.ListCreateAPIView):
           return Response(serialized_data.data, status=status.HTTP_201_CREATED)
       else:
           return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetImageView(generics.RetrieveAPIView):
+    serializer_class = ImageSerializer()
+
+    def get(self, request, *args, **kwargs):
+      image_id = kwargs.get('pk', None)
+      image_file = ImageRepo.objects.get(pk=image_id)
+      img_path =  image_file.processed_file
+      response = FileResponse(open(img_path.path, 'rb'), content_type="image/png")
+      return response
