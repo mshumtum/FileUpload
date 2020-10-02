@@ -6,7 +6,7 @@ import shortuuid
 
 
 
-def generate_edges(path, _filename,rgb_code=(254,1,154),threshold1=120, threshold2=450):
+def generate_edges(path, _filename,rgb_code=(254,1,154),threshold1=80, threshold2=170):
     def overlap_and_shift_edges(background_image, foreground_image,shift=(-250,0)):
         background = Image.open(background_image)
         foreground = Image.open(foreground_image)
