@@ -22,11 +22,13 @@ class ImageUploadView(generics.CreateAPIView):
           data = file_serializer.data
           filename = data.get('image_file')
           r_data = request.data
-          threshold_1 = int(r_data.get('t1'))
-          threshold_2 = int(r_data.get('t2'))
+          threshold_1 = r_data.get('t1')
+          threshold_2 = r_data.get('t2')
+          threshold1 = int(threshold_1) if threshold_1 else threshold_1
+          threshold2 = int(threshold_2) if threshold_2 else threshold_2
           filename = filename.replace('/media/', '')
           if threshold_1 and threshold_2:
-              processed_file = generate_edges(MEDIA_ROOT, filename, threshold1=threshold_1, threshold2=threshold_2)
+              processed_file = generate_edges(MEDIA_ROOT, filename, threshold1=threshold1, threshold2=threshold2)
           else:
               processed_file = generate_edges(MEDIA_ROOT, filename)
           ImageRepo.objects.filter(image_file=filename).update(processed_file=processed_file)
